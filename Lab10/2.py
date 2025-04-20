@@ -3,16 +3,16 @@ import random
 import time
 import psycopg2
 
-# Подключение к базе данных PostgreSQL
+
 conn = psycopg2.connect(
     host="localhost",
-    database="Lab10",  # Укажи свою базу, если другая
+    database="Lab10", 
     user="postgres",
     password="040806"
 )
 cur = conn.cursor()
 
-# Получение пользователя
+
 username = input("Введите ваше имя: ")
 cur.execute("SELECT id FROM users WHERE username = %s", (username,))
 user = cur.fetchone()
@@ -26,7 +26,6 @@ else:
     conn.commit()
     print("Пользователь создан.")
 
-# Инициализация Pygame
 pygame.init()
 
 # Константы
@@ -37,12 +36,11 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLACK = (0, 0, 0)
 
-# Настройка экрана
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Snake Game")
 clock = pygame.time.Clock()
 
-# Класс змейки
+
 class Snake:
     def __init__(self):
         self.body = [(WIDTH // 2, HEIGHT // 2)]
@@ -70,7 +68,7 @@ class Snake:
         for segment in self.body:
             pygame.draw.rect(screen, GREEN, (*segment, GRID_SIZE, GRID_SIZE))
 
-# Класс еды
+
 class Food:
     def __init__(self, snake_body):
         self.position = self.generate_position(snake_body)
@@ -90,7 +88,6 @@ class Food:
     def draw(self):
         pygame.draw.rect(screen, RED, (*self.position, GRID_SIZE, GRID_SIZE))
 
-# Инициализация объектов игры
 snake = Snake()
 food = Food(snake.body)
 speed = 10
@@ -98,7 +95,7 @@ score = 0
 level = 1
 running = True
 
-# Игровой цикл
+
 while running:
     screen.fill(BLACK)
     for event in pygame.event.get():
@@ -140,7 +137,7 @@ while running:
     pygame.display.flip()
     clock.tick(speed)
 
-# Сохраняем результат в БД
+
 game_state = str(snake.body)
 cur.execute(
     "INSERT INTO user_score (user_id, level, score, game_state) VALUES (%s, %s, %s, %s)",
